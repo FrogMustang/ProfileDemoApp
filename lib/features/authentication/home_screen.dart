@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:profile_demo_app/features/authentication/bloc/authentication_bloc.dart';
 import 'package:profile_demo_app/utils/constants.dart';
 import 'package:profile_demo_app/utils/custom_colors.dart';
 import 'package:profile_demo_app/utils/custom_icons.dart';
+import 'package:profile_demo_app/utils/utils.dart';
 import 'package:profile_demo_app/widgets/primary_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -120,8 +122,9 @@ class HomeScreen extends StatelessWidget {
                           Flexible(
                             child: PrimaryButton(
                               onPressed: () {
-                                // TODO handle logout
-                                Navigator.pop(context);
+                                getIt.get<AuthenticationBloc>().add(
+                                      const AuthenticationLoggedOut(),
+                                    );
                               },
                               text: 'Log Out',
                             ),

@@ -1,5 +1,7 @@
 import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:profile_demo_app/features/authentication/bloc/authentication_bloc.dart';
 import 'package:profile_demo_app/routing/app_routes_constants.dart';
 import 'package:profile_demo_app/utils/constants.dart';
 import 'package:profile_demo_app/utils/custom_colors.dart';
@@ -16,6 +18,11 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  String username = '';
+  String pass = '';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,38 +56,71 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 const SizedBox(height: 50),
 
-                // USERNAME
-                SizedBox(
-                  height: 60,
-                  child: TextFormField(
-                    cursorColor: CustomColors.lightGray,
-                    decoration: defaultFormFieldStyle(label: 'Username'),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // USERNAME
+                      SizedBox(
+                        height: 80,
+                        child: TextFormField(
+                          cursorColor: CustomColors.lightGray,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: defaultFormFieldStyle(label: 'Username'),
+                          validator: (String? val) {
+                            return val == null ||
+                                    val.isEmpty ||
+                                    !EmailValidator.validate(val)
+                                ? 'Please enter a valid username'
+                                : null;
+                          },
+                          onChanged: (String val) {
+                            setState(() {
+                              username = val;
+                            });
+                          },
+                        ),
+                      ),
 
-                // PASSWORD
-                SizedBox(
-                  height: 60,
-                  child: TextFormField(
-                    cursorColor: CustomColors.lightGray,
-                    decoration: defaultFormFieldStyle(label: 'Password'),
+                      // PASSWORD
+                      SizedBox(
+                        height: 80,
+                        child: TextFormField(
+                          cursorColor: CustomColors.lightGray,
+                          obscureText: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: defaultFormFieldStyle(label: 'Password'),
+                          validator: (String? val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Please enter a password';
+                            }
+
+                            if (val.length < 8) {
+                              return 'Password must be at least 8 chars long';
+                            }
+
+                            return null;
+                          },
+                          onChanged: (String val) {
+                            setState(() {
+                              pass = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 14),
 
                 // FORGOT PASSWORD
-                GestureDetector(
-                  onTap: () {},
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Forgot your password?',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: CustomColors.gray,
-                      ),
+                const Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Forgot your password?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: CustomColors.gray,
                     ),
                   ),
                 ),
@@ -89,11 +129,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 // LOGIN BUTTON
                 PrimaryButton(
                   onPressed: () {
-                    // TODO: handle login
-                    Navigator.pushNamed(
-                      context,
-                      kHomeScreen,
-                    );
+                    if (_formKey.currentState!.validate() == true) {
+                      getIt.get<AuthenticationBloc>().add(
+                            AuthenticationLoggedIn(
+                              username: username,
+                              password: pass,
+                            ),
+                          );
+                    }
                   },
                   text: 'Login',
                 ),

@@ -9,6 +9,11 @@ class AppRoutes {
   static Route<dynamic> routes(RouteSettings settings) {
     final dynamic args = settings.arguments;
     switch (settings.name) {
+      case kAuthenticate:
+        return MaterialPageRoute(
+          builder: (_) => const AuthenticationScreen(),
+          settings: settings,
+        );
       case kSignInScreen:
         return MaterialPageRoute(
           builder: (_) => const SignInScreen(),

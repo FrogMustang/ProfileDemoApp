@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "283341974830",
+    "project_id": "scale3c-ecb51",
+    "storage_bucket": "scale3c-ecb51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283341974830:android:3db7f5e801cc17fed4debf",
+        "android_client_info": {
+          "package_name": "com.example.profile_demo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-WOqnILZDkzyWECwb7foucq0kCRVXGW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

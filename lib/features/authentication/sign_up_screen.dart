@@ -1,6 +1,9 @@
 import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:profile_demo_app/features/authentication/bloc/authentication_bloc.dart';
+import 'package:profile_demo_app/routing/app_routes_constants.dart';
 import 'package:profile_demo_app/utils/constants.dart';
 import 'package:profile_demo_app/utils/custom_colors.dart';
 import 'package:profile_demo_app/utils/custom_icons.dart';
@@ -16,6 +19,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  String username = '';
+  String pass = '';
+  String repeatPass = '';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,41 +83,109 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 50),
 
-                // USERNAME
-                SizedBox(
-                  height: 60,
-                  child: TextFormField(
-                    cursorColor: CustomColors.lightGray,
-                    decoration: defaultFormFieldStyle(label: 'Enter email'),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // USERNAME
+                      SizedBox(
+                        height: 80,
+                        child: TextFormField(
+                          cursorColor: CustomColors.lightGray,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration:
+                              defaultFormFieldStyle(label: 'Enter email'),
+                          validator: (String? val) {
+                            return val == null ||
+                                    val.isEmpty ||
+                                    !EmailValidator.validate(val)
+                                ? 'Please enter a valid email'
+                                : null;
+                          },
+                          onChanged: (String val) {
+                            setState(() {
+                              username = val;
+                            });
+                          },
+                        ),
+                      ),
 
-                // PASSWORD
-                SizedBox(
-                  height: 60,
-                  child: TextFormField(
-                    cursorColor: CustomColors.lightGray,
-                    decoration: defaultFormFieldStyle(label: 'Enter password'),
+                      // PASSWORD
+                      SizedBox(
+                        height: 80,
+                        child: TextFormField(
+                          cursorColor: CustomColors.lightGray,
+                          obscureText: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration:
+                              defaultFormFieldStyle(label: 'Enter password'),
+                          validator: (String? val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Please enter a password';
+                            }
+
+                            if (val.length < 8) {
+                              return 'Password must be at least 8 chars long';
+                            }
+
+                            return null;
+                          },
+                          onChanged: (String val) {
+                            setState(() {
+                              pass = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 14),
 
                 // CONFIRM PASSWORD
                 SizedBox(
-                  height: 60,
+                  height: 80,
                   child: TextFormField(
                     cursorColor: CustomColors.lightGray,
+                    obscureText: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration:
                         defaultFormFieldStyle(label: 'Confirm password'),
+                    validator: (String? val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Please enter a password';
+                      }
+
+                      if (val.length < 8) {
+                        return 'Password must be at least 8 chars long';
+                      }
+
+                      if (val != pass) {
+                        return 'Passwords must be the same';
+                      }
+
+                      return null;
+                    },
+                    onChanged: (String val) {
+                      setState(() {
+                        repeatPass = val;
+                      });
+                    },
                   ),
                 ),
-                const SizedBox(height: 14),
 
                 // SIGN UP BUTTON
                 PrimaryButton(
                   onPressed: () {
-                    // TODO: handle register
+                    if (_formKey.currentState?.validate() == true) {
+                      getIt.get<AuthenticationBloc>().add(
+                            AuthenticationSignedUp(
+                              username: username,
+                              password: pass,
+                            ),
+                          );
+
+                      Navigator.pushNamed(context, kAuthenticate);
+                    }
                   },
                   text: 'Sign Up',
                 ),
