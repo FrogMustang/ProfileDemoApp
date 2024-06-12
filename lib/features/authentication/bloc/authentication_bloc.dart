@@ -26,7 +26,11 @@ class AuthenticationBloc
 
     if (!usedForTesting) {
       _userSubscription = auth.user.listen(
-        (AppUser? user) => add(AuthenticationUserChanged(newUser: user)),
+        (AppUser? user) {
+          logger.i('USER CHANGED: $user');
+
+          add(AuthenticationUserChanged(newUser: user));
+        },
       );
     }
   }

@@ -52,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
             backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
             title: const Text(
               'Sign Up',
               style: TextStyle(
@@ -59,7 +60,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontSize: 18,
               ),
             ),
-            automaticallyImplyLeading: false,
             leadingWidth: 10 + Constants.kHorScreenPadding,
             leading: Row(
               children: [
