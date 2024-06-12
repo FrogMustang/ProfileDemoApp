@@ -14,16 +14,20 @@ final Logger logger = Logger(
 
 final GetIt getIt = GetIt.instance;
 
-Future<void> setUpGetIt() async {
+Future<void> setUpGetIt({
+  bool usedForTesting = false,
+}) async {
   getIt.registerLazySingleton<IAuthenticationRepository>(
     () => IAuthenticationRepository(),
   );
 
-  getIt.registerSingleton<AuthenticationBloc>(
-    AuthenticationBloc(
-      auth: getIt.get<IAuthenticationRepository>(),
-    ),
-  );
+  if (!usedForTesting) {
+    getIt.registerSingleton<AuthenticationBloc>(
+      AuthenticationBloc(
+        auth: getIt.get<IAuthenticationRepository>(),
+      ),
+    );
+  }
 }
 
 InputDecoration defaultFormFieldStyle({required String label}) {

@@ -10,6 +10,7 @@ import 'package:profile_demo_app/utils/constants.dart';
 import 'package:profile_demo_app/utils/custom_colors.dart';
 import 'package:profile_demo_app/utils/custom_icons.dart';
 import 'package:profile_demo_app/utils/utils.dart';
+import 'package:profile_demo_app/utils/widget_keys.dart';
 import 'package:profile_demo_app/widgets/primary_button.dart';
 import 'package:profile_demo_app/widgets/social_login_button.dart';
 
@@ -197,6 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   // SIGN UP BUTTON
                   PrimaryButton(
+                    key: const Key(WidgetKeys.signUpButton),
                     onPressed: () {
                       if (_formKey.currentState?.validate() == true) {
                         getIt.get<AuthenticationBloc>().add(

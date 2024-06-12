@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:profile_demo_app/features/authentication/bloc/authentication_bloc.dart';
 import 'package:profile_demo_app/firebase_options.dart';
+import 'package:profile_demo_app/repositories/authentication_repository.dart';
 import 'package:profile_demo_app/routing/app_routes.dart';
 import 'package:profile_demo_app/utils/utils.dart';
 

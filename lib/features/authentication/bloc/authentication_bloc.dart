@@ -17,19 +17,23 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required this.auth,
+    this.usedForTesting = false,
   }) : super(const AuthenticationState()) {
     on<AuthenticationUserChanged>(_onUserChanged);
     on<AuthenticationLoggedIn>(_onLogin);
     on<AuthenticationSignedUp>(_onSignUp);
     on<AuthenticationLoggedOut>(_onLogOut);
 
-    _userSubscription = auth.user.listen(
-      (AppUser? user) => add(AuthenticationUserChanged(newUser: user)),
-    );
+    if (!usedForTesting) {
+      _userSubscription = auth.user.listen(
+        (AppUser? user) => add(AuthenticationUserChanged(newUser: user)),
+      );
+    }
   }
 
   final AuthenticationRepository auth;
-  late final StreamSubscription<AppUser?> _userSubscription;
+  StreamSubscription<AppUser?>? _userSubscription;
+  final bool usedForTesting;
 
   void _onUserChanged(
     AuthenticationUserChanged event,
@@ -46,7 +50,10 @@ class AuthenticationBloc
 
   @override
   Future<void> close() {
-    _userSubscription.cancel();
+    if (_userSubscription != null) {
+      _userSubscription!.cancel();
+    }
+
     return super.close();
   }
 
