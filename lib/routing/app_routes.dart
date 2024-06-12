@@ -7,7 +7,6 @@ import 'package:profile_demo_app/routing/app_routes_constants.dart';
 
 class AppRoutes {
   static Route<dynamic> routes(RouteSettings settings) {
-    final dynamic args = settings.arguments;
     switch (settings.name) {
       case kAuthenticate:
         return MaterialPageRoute(

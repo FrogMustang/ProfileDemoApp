@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:meta/meta.dart';
 import 'package:profile_demo_app/models/app_user.dart';
 import 'package:profile_demo_app/repositories/repositories.dart';
 import 'package:profile_demo_app/utils/utils.dart';
@@ -157,13 +157,20 @@ class AuthenticationBloc
           );
         },
         (bool success) {
-          emit(
-            state.copyWith(
-              status: success
-                  ? FormzStatus.submissionSuccess
-                  : FormzStatus.submissionFailure,
-            ),
-          );
+          if (success) {
+            emit(
+              state.copyWith(
+                status: FormzStatus.submissionSuccess,
+                user: const Optional.absent(),
+              ),
+            );
+          } else {
+            emit(
+              state.copyWith(
+                status: FormzStatus.submissionFailure,
+              ),
+            );
+          }
         },
       );
     } catch (e, stackTrace) {
