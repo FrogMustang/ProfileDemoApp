@@ -7,7 +7,7 @@ class CustomIcons {
   static const String twitter = 'assets/icons/twitter.svg';
   static const String linkedIn = 'assets/icons/linkedin.svg';
 
-  static const String email = 'assets/icons/facebook.svg';
+  static const String email = 'assets/icons/email.svg';
   static const String phone = 'assets/icons/phone.svg';
   static const String menu = 'assets/icons/menu.svg';
 

@@ -173,13 +173,13 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 ProfileInfoBanner(
-                                  icon: CustomIcons.phone,
+                                  icon: CustomIcons.email,
                                   title: 'Email',
                                   subtitle: state.user!.email,
                                 ),
                                 const SizedBox(height: 16),
                                 const ProfileInfoBanner(
-                                  icon: CustomIcons.phone,
+                                  icon: CustomIcons.completed,
                                   title: 'Completed projects',
                                   subtitle: '248',
                                 ),
